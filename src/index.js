@@ -1,57 +1,83 @@
-import "./style.css";
+import './style.css';
+import {
+    createCalendarView
+} from './componentss/calendar_view';
+import {
+    createCalendarButtons
+} from './componentss/calendar_buttons';
 import {
     loadEvents
-} from './components/calendar-event';
-import {
-    calendarloader
-} from './components/calendar-dates';
-
+} from './componentss/calendar_events';
+import {webheader} from './componentss/site_header'
 
 const body = document.body;
-const media = document.createElement('div');
-media.className = 'media';
-body.appendChild(media);
+const calendardisplay = document.createElement('div');
+calendardisplay.className = 'calendardisplay';
+body.appendChild(calendardisplay);
 
-//Find jalali date
+const siteheader = webheader();
+document.body.prepend(siteheader.header);
+siteheader.startClock();
+
+
+// get today in jalali
 const formatter = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric'
 });
 const parts = formatter.formatToParts(new Date());
-let jy = +parts.find(p => p.type === "year").value;
-let jm = +parts.find(p => p.type === "month").value - 1;
-let jd = +parts.find(p => p.type === "day").value;
+let jyear = +parts.find(p => p.type === 'year').value;
+let jmonth = +parts.find(p => p.type === 'month').value - 1;
+let jday = +parts.find(p => p.type === 'day').value;
 
-const cal = calendarloader(jy, jm, jd);
-media.append(cal.mainCalender, loadEvents(jm));
+//append components to load the calendar 
+function render() {
+    calendardisplay.innerHTML = '';
 
-//Change Month event
-cal.calenderBody.addEventListener("change", () => {
-    media.childNodes[1].remove();
-    media.appendChild(loadEvents(jm));
-});
+    // create view
+    const view = createCalendarView(jyear, jmonth, jday);
 
-//Next button
-cal.nextBtn.addEventListener("click", () => {
-    jm++;
-    if (jm > 11) {
-        jm = 0;
-        jy++;
-    }
+    // create buttons wired to handlers
+    const buttons = createCalendarButtons(() => {
+        // prev
+        jmonth--;
+        if (jmonth < 0) {
+            jmonth = 11;
+            jyear--;
+        }
+        view.renderMonth(jyear, jmonth, jday);
+        // update events
+        calendardisplay.lastChild && calendardisplay.removeChild(calendardisplay.lastChild);
+        calendardisplay.appendChild(loadEvents(jmonth));
+    }, () => {
+        // next
+        jmonth++;
+        if (jmonth > 11) {
+            jmonth = 0;
+            jyear++;
+        }
+        view.renderMonth(jyear, jmonth, jday);
+        // update events
+        calendardisplay.lastChild && calendardisplay.removeChild(calendardisplay.lastChild);
+        calendardisplay.appendChild(loadEvents(jmonth));
+    });
 
-    cal.reload(jy, jm, jd);
-    cal.calenderBody.dispatchEvent(new Event("change"));
-});
 
-//Prev button
-cal.prevBtn.addEventListener("click", () => {
-    jm--;
-    if (jm < 0) {
-        jm = 11;
-        jy--;
-    }
+    // replace view's buttons with those created by createCalendarButtons 
+    const header = view.main.querySelector('.calendar_header');
+    header.replaceChild(buttons.prevBtn, header.querySelector('#prev_button'));
+    header.replaceChild(buttons.nextBtn, header.querySelector('#next_button'));
 
-    cal.reload(jy, jm, jd);
-    cal.calenderBody.dispatchEvent(new Event("change"));
-});
+
+    // initial render
+    view.renderMonth(jyear, jmonth, jday);
+
+
+    // append calendar and events
+    calendardisplay.appendChild(view.main);
+    calendardisplay.appendChild(loadEvents(jmonth));
+}
+
+
+render();
