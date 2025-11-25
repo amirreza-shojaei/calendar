@@ -15,39 +15,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: "UI-Font", sans-serif;
-  background: #70debdab;
+  background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
   
-}
-
-.web_header {
- 
-  background: #5edca7b8;
-  padding: 10px 20px;
-  box-shadow: var(--shadow);
-  font-size: 18px;
-  font-weight: 700;
-  text-align: center;
-  border-radius: var(--radius);
-  margin: 20px auto;
-  width: 80%;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.clock {
-  font-family: "UI-Font", sans-serif;
-  font-size: 35px;
-  font-weight: 700;
-  text-align: center;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .calendardisplay {
@@ -101,17 +73,13 @@ body {
 
 
 .main_calendar {
-  width: 420px;
-  background: rgba(255, 255, 255, 0.15); 
-  backdrop-filter: blur(12px);          
-  -webkit-backdrop-filter: blur(12px);   
+  width: 420px;            
+  background: var(--card);
   border-radius: 20px;
   padding: 22px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-  border: 1px solid rgba(255,255,255,0.25);
-  direction: rtl;
+  box-shadow: var(--shadow);
+  direction: rtl;          
 }
-
 
 
 .calendar_header{
@@ -163,19 +131,19 @@ body {
 }
 
 .day.current {
-   background: #64e3d646;
+   background: #f8f8f8;
 }
 
 .day.prev,
 .day.next {
-  background: #79edcc;
-  color: #666;
+  background: #f5f5f5;
+  color: var(--muted);
   font-weight:600;
 }
 
 
 .day.nextholiday {
-  background: #79edcc;
+  background: #f5f5f5;
   font-weight:600;
   color: #c46262;
 }
@@ -185,20 +153,20 @@ body {
 }
 
 .day.today{
-  background: #02cba3;
-  color: #333333;
+  background: #e45c5c;
+  color: #333;
   box-shadow: 0 6px 18px rgba(255,77,77,0.14);
 }
 
 .day.today:hover{
-  background: #2ff6ba;
+  background: #d89292;
   color: #333;
   box-shadow: 0 6px 18px rgba(255,77,77,0.14);
 }
 
 .day:hover{
   transform: translateY(-4px);
-  background:#77eccb;
+  background:#979797;
 }
 .event-day {
   font-weight: 800;
@@ -227,5 +195,3 @@ body {
   src: url("./assets/fonts/IRANSansX-Bold.woff2") format("woff2");
   font-weight: 700;
 }
-
-

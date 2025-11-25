@@ -10,7 +10,7 @@ datesInformation.className = 'dates_information';
 datesInformation.id = 'datesInfo';
 
 
-const datesInfoHeader = document.createElement('header');
+const datesInfoHeader = document.createElement('div');
 datesInfoHeader.id = 'dates_info_header';
 datesInfoHeader.innerText = `مناسب های ${jMonths2[monthIndex]} ماه`;
 

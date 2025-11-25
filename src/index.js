@@ -1,24 +1,24 @@
 import './style.css';
 import {
     createCalendarView
-} from './componentss/calendar_view';
+} from './components/calendar_view';
 import {
     createCalendarButtons
-} from './componentss/calendar_buttons';
+} from './components/calendar_buttons';
 import {
     loadEvents
-} from './componentss/calendar_events';
-import {webheader} from './componentss/site_header'
+} from './components/calendar_events';
+import {webheader} from './components/site_header'
 
 const body = document.body;
 const calendardisplay = document.createElement('div');
 calendardisplay.className = 'calendardisplay';
 body.appendChild(calendardisplay);
-
+/*
 const siteheader = webheader();
 document.body.prepend(siteheader.header);
 siteheader.startClock();
-
+*/
 
 // get today in jalali
 const formatter = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
