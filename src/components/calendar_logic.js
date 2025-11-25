@@ -1,5 +1,5 @@
 // just calendar logic 
-import { toGregorian } from 'jalaali-js';
+import { toGregorian } from '../liberary/jalali.js';
 //kabise year
 export function isLeapJalali(jy) {
 const kabisePattern = [1, 5, 9, 13, 17, 22, 26, 30];

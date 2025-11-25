@@ -1,14 +1,12 @@
 import './style.css';
 import {
-    createCalendarView
+    createCalendarView,createCalendarButtons
 } from './components/calendar_view';
-import {
-    createCalendarButtons
-} from './components/calendar_buttons';
+
 import {
     loadEvents
 } from './components/calendar_events';
-import {webheader} from './components/site_header'
+//import {webheader} from './components/site_header'
 
 const body = document.body;
 const calendardisplay = document.createElement('div');
