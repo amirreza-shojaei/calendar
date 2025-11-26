@@ -1,6 +1,6 @@
 import './style.css';
 import {
-    createCalendarView,createCalendarButtons
+    createCalendarView
 } from './components/calendar_view';
 
 import {
@@ -29,53 +29,43 @@ let jyear = +parts.find(p => p.type === 'year').value;
 let jmonth = +parts.find(p => p.type === 'month').value - 1;
 let jday = +parts.find(p => p.type === 'day').value;
 
-//append components to load the calendar 
-function render() {
+
+//reload calendar function
+function reloadCalendar() {
+
     calendardisplay.innerHTML = '';
 
-    // create view
-    const view = createCalendarView(jyear, jmonth, jday);
+    const calendarview = createCalendarView(jyear, jmonth, jday);
+    calendardisplay.appendChild(calendarview.main);
+    const calendarevent = loadEvents(jmonth);
+    calendardisplay.appendChild(calendarevent);
 
-    // create buttons wired to handlers
-    const buttons = createCalendarButtons(() => {
-        // prev
+    calendarview.main.addEventListener('change', () => {
+        calendardisplay.removeChild(calendarview.main);
+        calendardisplay.removeChild(calendarevent);
+        calendardisplay.appendChild(createCalendarView(jyear, jmonth, jday).main);
+        calendardisplay.appendChild(loadEvents(jmonth));
+    });
+    
+    calendarview.prevBtn.addEventListener('click', () => {
         jmonth--;
         if (jmonth < 0) {
             jmonth = 11;
             jyear--;
         }
-        view.renderMonth(jyear, jmonth, jday);
-        // update events
-        calendardisplay.lastChild && calendardisplay.removeChild(calendardisplay.lastChild);
-        calendardisplay.appendChild(loadEvents(jmonth));
-    }, () => {
-        // next
+        calendarview.main.dispatchEvent(new Event('change'));
+        reloadCalendar();
+    });
+
+    calendarview.nextBtn.addEventListener('click', () => {
         jmonth++;
         if (jmonth > 11) {
             jmonth = 0;
             jyear++;
         }
-        view.renderMonth(jyear, jmonth, jday);
-        // update events
-        calendardisplay.lastChild && calendardisplay.removeChild(calendardisplay.lastChild);
-        calendardisplay.appendChild(loadEvents(jmonth));
+        calendarview.main.dispatchEvent(new Event('change'));
+        reloadCalendar();
     });
 
-
-    // replace view's buttons with those created by createCalendarButtons 
-    const header = view.main.querySelector('.calendar_header');
-    header.replaceChild(buttons.prevBtn, header.querySelector('#prev_button'));
-    header.replaceChild(buttons.nextBtn, header.querySelector('#next_button'));
-
-
-    // initial render
-    view.renderMonth(jyear, jmonth, jday);
-
-
-    // append calendar and events
-    calendardisplay.appendChild(view.main);
-    calendardisplay.appendChild(loadEvents(jmonth));
 }
-
-
-render();
+reloadCalendar();

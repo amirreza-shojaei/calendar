@@ -4,28 +4,31 @@ import {
     toPersianNumber
 } from './util';
 import * as core from './calendar_logic';
-
+/*
 // creates buttons and wires handlers passed from caller
 export function createCalendarButtons(onPrev, onNext) {
-    
-//prev
-const prevBtn = document.createElement('button');
-prevBtn.id = 'prev_button';
-prevBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-//next
-const nextBtn = document.createElement('button');
-nextBtn.id = 'next_button';
-nextBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
 
-prevBtn.addEventListener('click', onPrev);
-nextBtn.addEventListener('click', onNext);
+    //prev
+    const prevBtn = document.createElement('button');
+    prevBtn.id = 'prev_button';
+    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+    //next
+    const nextBtn = document.createElement('button');
+    nextBtn.id = 'next_button';
+    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
 
-//return buttons
-return { prevBtn, nextBtn };
+    prevBtn.addEventListener('click', onPrev);
+    nextBtn.addEventListener('click', onNext);
+
+    //return buttons
+    return {
+        prevBtn,
+        nextBtn
+    };
 }
-
+*/
 export function createCalendarView(initialYear, initialMonth, initialDay) {
- 
+
     //calender box
     const mainCalendar = document.createElement('div');
     mainCalendar.className = 'main_calendar';
@@ -39,9 +42,6 @@ export function createCalendarView(initialYear, initialMonth, initialDay) {
     monthSpan.id = 'monthName';
     const yearSpan = document.createElement('span');
     yearSpan.id = 'year';
-
-    monthYearDiv.append(monthSpan, yearSpan);
-
     // buttons placeholders
     const prevBtn = document.createElement('button');
     prevBtn.id = 'prev_button';
@@ -49,63 +49,58 @@ export function createCalendarView(initialYear, initialMonth, initialDay) {
     const nextBtn = document.createElement('button');
     nextBtn.id = 'next_button';
     nextBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-
-    boxheader.append(prevBtn, monthYearDiv, nextBtn);
     //calendar box month days
     const calendarBody = document.createElement('div');
     calendarBody.className = 'calendar_dates';
 
-    mainCalendar.append(boxheader, calendarBody);
-
     // month days creator function
-    function renderMonth(y, m, d) {
-        calendarBody.innerHTML = '';
-        const days = core.getJalaliMonthDays(y, m);
-        const start = core.getStartOfJalaliMonthWeekday(y, m);
+    calendarBody.innerHTML = '';
+    const days = core.getJalaliMonthDays(initialYear, initialMonth);
+    const start = core.getStartOfJalaliMonthWeekday(initialYear, initialMonth);
 
-        const prevMonth = m === 0 ? 11 : m - 1;
-        const prevYear = m === 0 ? y - 1 : y;
-        const prevDays = core.getJalaliMonthDays(prevYear, prevMonth);
-        const totalCells = 42; // 6 rows * 7 cols
-        const nextNeeded = totalCells - (start + days);
-
-        // prev month days
-        for (let i = 0; i < start; i++) {
-            const el = document.createElement('div');
-            el.className = 'day prev';
-            el.innerText = toPersianNumber(prevDays - start + i + 1);
-            calendarBody.appendChild(el);
-        }
-
-        // current month days
-        for (let day = 1; day <= days; day++) {
-            const el = document.createElement('div');
-            el.className = 'day current';
-            el.innerText = toPersianNumber(day);
-            const weekday = (start + (day - 1)) % 7;
-            if (weekday === 6) el.classList.add('holiday');
-            if (y === initialYear && m === initialMonth && day === initialDay) el.classList.add('today');
-            calendarBody.appendChild(el);
-        }
-
-        // next month days
-        for (let i = 1; i <= nextNeeded; i++) {
-            const el = document.createElement('div');
-            el.className = 'day next';
-            el.innerText = toPersianNumber(i);
-            const weekday = (start + days + (i - 1)) % 7;
-            if (weekday === 6) el.classList.add('nextholiday');
-            calendarBody.appendChild(el);
-        }
-
-        monthSpan.innerText = jMonths[m];
-        yearSpan.innerText = toPersianNumber(y);
+    const prevMonth = initialMonth === 0 ? 11 : initialMonth - 1;
+    const prevYear = initialMonth === 0 ? initialYear - 1 : initialYear;
+    const prevDays = core.getJalaliMonthDays(prevYear, prevMonth);
+    const totalCells = 42; // 6 rows * 7 cols
+    const nextNeeded = totalCells - (start + days);
+    // prev month days
+    for (let i = 0; i < start; i++) {
+        const el = document.createElement('div');
+        el.className = 'day prev';
+        el.innerText = toPersianNumber(prevDays - start + i + 1);
+        calendarBody.appendChild(el);
     }
+    // current month days
+    for (let day = 1; day <= days; day++) {
+        const el = document.createElement('div');
+        el.className = 'day current';
+        el.innerText = toPersianNumber(day);
+        const weekday = (start + (day - 1)) % 7;
+        if (weekday === 6) el.classList.add('holiday');
+        // if (y === initialYear && m === initialMonth && day === initialDay) el.classList.add('today');
+        calendarBody.appendChild(el);
+    }
+    // next month days
+    for (let i = 1; i <= nextNeeded; i++) {
+        const el = document.createElement('div');
+        el.className = 'day next';
+        el.innerText = toPersianNumber(i);
+        const weekday = (start + days + (i - 1)) % 7;
+        if (weekday === 6) el.classList.add('nextholiday');
+        calendarBody.appendChild(el);
+    }
+
+    monthSpan.innerText = jMonths[initialMonth];
+    yearSpan.innerText = toPersianNumber(initialYear);
+
+    monthYearDiv.append(monthSpan, yearSpan);
+    boxheader.append(prevBtn, monthYearDiv, nextBtn);
+    mainCalendar.append(boxheader, calendarBody);
 
     return {
         main: mainCalendar,
         prevBtn,
         nextBtn,
-        renderMonth,
+
     };
 }
