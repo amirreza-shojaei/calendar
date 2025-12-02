@@ -4,63 +4,63 @@ import {
     toPersianNumber as toPersian
 } from './util';
 
-export class Event {
-    monthindex;
-    datesInformation;
-    datesInfoHeader;
-    datesInfoList;
+export class calendar_events {
+    month_index;
+    dates_information;
+    dates_info_header;
+    dates_info_list;
     events;
-    monthname;
-    constructor(monthindex) {
-        this.setMonth(monthindex);
+    month_name;
+    constructor(month_index) {
+        this.set_Month(month_index);
         // root element
-        this.datesInformation = document.createElement('div');
-        this.datesInformation.className = 'dates_information';
+        this.dates_information = document.createElement('div');
+        this.dates_information.className = 'dates_information';
         // header
-        this.datesInfoHeader = document.createElement('div');
-        this.datesInfoHeader.id = 'dates_info_header';
+        this.dates_info_header = document.createElement('div');
+        this.dates_info_header.id = 'dates_info_header';
         // list
-        this.datesInfoList = document.createElement('ul');
-        this.datesInfoList.id = 'dates_info_list';
+        this.dates_info_list = document.createElement('ul');
+        this.dates_info_list.id = 'dates_info_list';
     }
-    setMonth(monthIndex) {
-        this.monthindex = monthIndex;
-        this.monthname = jMonths2[monthIndex];
-        this.events = eventsList[monthIndex] || [];
+    set_Month(month_index) {
+        this.month_index = month_index;
+        this.month_name = jMonths2[month_index];
+        this.events = eventsList[month_index] || [];
     }
-    createHeader() {
-        this.datesInfoHeader.innerText = `مناسب های ${this.monthname} ماه`;
+    create_Header() {
+        this.dates_info_header.innerText = `مناسب های ${this.month_name} ماه`;
     }
-    sortEvents() {
+    sort_Events() {
         this.events.sort((a, b) => a.day - b.day);
     }
-    createEventItem(ev) {
+    create_Event_item(ev) {
         const li = document.createElement('li');
         li.className = 'event-item';
         li.innerHTML = `
-            <span class="event-day">${toPersian(ev.day)} ${this.monthname}</span>
+            <span class="event-day">${toPersian(ev.day)} ${this.month_name}</span>
             <span class="event-title">${ev.title}</span>
         `;
         return li;
     }
-    appendEvents() {
+    append_Events() {
         this.events.forEach(ev => {
-            const li = this.createEventItem(ev);
-            this.datesInfoList.appendChild(li);
+            const li = this.create_Event_item(ev);
+            this.dates_info_list.appendChild(li);
         });
     }
-    reloadEvents(monthIndex) {
-        this.setMonth(monthIndex);
-        this.loaderevents();
+    reload_Events(month_index) {
+        this.set_Month(month_index);
+        this.load_Events();
     }
-    loaderevents() {
-        this.datesInfoList.innerText = "";
+    load_Events() {
+        this.dates_info_list.innerText = "";
 
-        this.createHeader();
-        this.sortEvents();
-        this.appendEvents();
-        this.datesInformation.append(this.datesInfoHeader, this.datesInfoList);
+        this.create_Header();
+        this.sort_Events();
+        this.append_Events();
+        this.dates_information.append(this.dates_info_header, this.dates_info_list);
 
-        return this.datesInformation;
+        return this.dates_information;
     }
 }

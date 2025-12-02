@@ -1,19 +1,19 @@
 // just calendar logic 
 import { toGregorian } from '../library/jalali.js';
 //kabise year
-export function isLeapJalali(jy) {
+export function is_Leap_Jalali(jy) {
 const kabisePattern = [1, 5, 9, 13, 17, 22, 26, 30];
 return kabisePattern.includes(jy % 33);
 };
 //month days
-export function getJalaliMonthDays(jy, jm) {
+export function get_Jalali_Month_Days(jy, jm) {
 // jm: 0..11
 if (jm <= 5) return 31;
 if (jm <= 10) return 30;
-return isLeapJalali(jy) ? 30 : 29;
+return is_Leap_Jalali(jy) ? 30 : 29;
 };
 //start of month weekday
-export function getStartOfJalaliMonthWeekday(jy, jm) {
+export function get_Start_Of_Jalali_Month_Weekday(jy, jm) {
 // return 0..6 where Saturday=0 ... Friday=6
 const g = toGregorian(jy, jm + 1, 1);
 const weekday = new Date(g.gy, g.gm - 1, g.gd).getDay();
