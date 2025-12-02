@@ -164,6 +164,23 @@ body {
   box-shadow: 0 6px 18px rgba(255,77,77,0.14);
 }
 
+#today_button{
+  margin-top:15px;
+  width:100%;
+  padding:10px 0;
+  background:#ff4d4d;
+  font-family: "UI-Font", sans-serif;
+  color: var(--text);
+  border:none;
+  border-radius:8px;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+  transition:background .2s ease;
+}
+#today_button:hover{
+  background:#ae4545;
+}
 .day:hover{
   transform: translateY(-4px);
   background:#979797;
