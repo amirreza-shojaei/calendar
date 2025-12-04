@@ -38,5 +38,6 @@ const newMonth = e.detail.month;
 EventElement.reload_Events(newMonth);
 });
 
+
 calendardisplay.appendChild(ViewElement.load_View());
 calendardisplay.appendChild(EventElement.load_Events());

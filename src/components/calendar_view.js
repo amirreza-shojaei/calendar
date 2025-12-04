@@ -4,7 +4,7 @@ import {
     toPersianNumber
 } from './util';
 import * as core from './calendar_logic';
-
+import eventsList from '../data/events.json';
 export class calendar_view {
     initial_Year;
     initial_Month;
@@ -19,6 +19,15 @@ export class calendar_view {
     todayBtn;
     calendarBody;
     currentdate;
+    holidays_List = [];
+
+    set_Holidays(month_index) {
+        for (let i = 0; i < eventsList[month_index].length; i++) {
+            if (eventsList[month_index][i].holiday === true) {
+                this.holidays_List.push(eventsList[month_index][i].day);
+            }
+        }
+    }
     constructor(year, month, day) {
         this.initial_Day = day;
         this.initial_Month = month;
@@ -53,7 +62,7 @@ export class calendar_view {
         //back to today button
         this.todayBtn = document.createElement('button');
         this.todayBtn.id = 'today_button';
-        
+
 
     }
     update_date(year, month, day) {
@@ -103,7 +112,13 @@ export class calendar_view {
             el.className = 'day current';
             el.innerText = toPersianNumber(day);
             const weekday = (start + (day - 1)) % 7;
-            if (weekday === 6) el.classList.add('holiday');
+            if (weekday === 6) {
+                el.classList.add('holiday');
+                
+            };
+            if (this.holidays_List.includes(day)) {
+                el.classList.add('holiday');
+            };
             this.set_current_date(day, el);
             this.calendarBody.appendChild(el);
         }
@@ -156,6 +171,7 @@ export class calendar_view {
                 this.initial_Year--;
             }
         }
+        this.holidays_List.length = 0;
         this.render();
         this.listener_month_change();
 
@@ -169,7 +185,7 @@ export class calendar_view {
         this.update_date(year, month, day);
         this.load_View();
     }
-    
+
     restart_to_today_button() {
         this.todayBtn.addEventListener('click', () => {
             this.update_date(this.currentdate.year, this.currentdate.month, this.currentdate.day);
@@ -177,13 +193,16 @@ export class calendar_view {
             this.listener_month_change();
         });
     }
+
     render() {
         this.calendarBody.innerText = '';
+        this.set_Holidays(this.initial_Month);
         this.create_prev_month_days();
         this.create_current_month_days();
         this.create_next_month_days();
         this.create_box_header();
         this.create_restart_button();
+        
     }
     load_View() {
         this.render();
@@ -191,7 +210,7 @@ export class calendar_view {
         this.restart_to_today_button();
         this.monthYearDiv.append(this.monthSpan, this.yearSpan);
         this.boxheader.append(this.prevBtn, this.monthYearDiv, this.nextBtn);
-        this.mainCalendar.append(this.boxheader, this.calendarBody,this.todayBtn);
+        this.mainCalendar.append(this.boxheader, this.calendarBody, this.todayBtn);
         return this.mainCalendar;
     }
 

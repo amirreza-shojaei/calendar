@@ -11,6 +11,7 @@ export class calendar_events {
     dates_info_list;
     events;
     month_name;
+    events_holiday_list;
     constructor(month_index) {
         this.set_Month(month_index);
         // root element
@@ -33,6 +34,7 @@ export class calendar_events {
     }
     sort_Events() {
         this.events.sort((a, b) => a.day - b.day);
+    
     }
     create_Event_item(ev) {
         const li = document.createElement('li');
@@ -41,6 +43,9 @@ export class calendar_events {
             <span class="event-day">${toPersian(ev.day)} ${this.month_name}</span>
             <span class="event-title">${ev.title}</span>
         `;
+        if (ev.holiday===true) {
+            li.classList.add('holiday-event');
+        }
         return li;
     }
     append_Events() {
