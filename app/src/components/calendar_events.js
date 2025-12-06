@@ -1,7 +1,7 @@
 import eventsList from '../data/events.json';
 import jMonths2 from '../data/jalali-months.json';
 import {
-    toPersianNumber as toPersian
+    toPersianNumber,persianToEnglishNumber
 } from './util';
 
 export class calendar_events {
@@ -34,19 +34,39 @@ export class calendar_events {
     }
     sort_Events() {
         this.events.sort((a, b) => a.day - b.day);
-    
+
     }
     create_Event_item(ev) {
         const li = document.createElement('li');
         li.className = 'event-item';
+        const daysInMonth = ev.day;
         li.innerHTML = `
-            <span class="event-day">${toPersian(ev.day)} ${this.month_name}</span>
+            <span class="event-day">${toPersianNumber(daysInMonth)} ${this.month_name}</span>
             <span class="event-title">${ev.title}</span>
         `;
-        if (ev.holiday===true) {
+        if (ev.holiday === true) {
             li.classList.add('holiday-event');
         }
         return li;
+    }
+    listenerHoverEventItems() {
+        const eventItems = this.dates_info_list.querySelectorAll('.event-item');
+        eventItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const detail = {
+                    day: persianToEnglishNumber(item.querySelector('.event-day').innerText.split(' ')[0])
+                };
+                this.dates_information.dispatchEvent(new CustomEvent('mouseon', {
+                    detail: detail
+                })); 
+            });
+            item.addEventListener('mouseleave', () => {
+                this.dates_information.dispatchEvent(new CustomEvent('mouseout', {
+                    detail: null
+                }));
+            });
+        });
+
     }
     append_Events() {
         this.events.forEach(ev => {
@@ -64,6 +84,7 @@ export class calendar_events {
         this.create_Header();
         this.sort_Events();
         this.append_Events();
+        this.listenerHoverEventItems();
         this.dates_information.append(this.dates_info_header, this.dates_info_list);
 
         return this.dates_information;

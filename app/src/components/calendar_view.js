@@ -1,7 +1,7 @@
 // just  view builder and creator month days.
 import jMonths from '../data/jalali-months.json';
 import {
-    toPersianNumber
+    toPersianNumber, persianToEnglishNumber
 } from './util';
 import * as core from './calendar_logic';
 import eventsList from '../data/events.json';
@@ -114,7 +114,7 @@ export class calendar_view {
             const weekday = (start + (day - 1)) % 7;
             if (weekday === 6) {
                 el.classList.add('holiday');
-                
+
             };
             if (this.holidays_List.includes(day)) {
                 el.classList.add('holiday');
@@ -142,7 +142,7 @@ export class calendar_view {
         this.yearSpan.innerText = toPersianNumber(this.initial_Year);
     }
     create_restart_button() {
-        this.todayBtn.innerHTML = 'بازگشت به روز جاری';
+        this.todayBtn.innerText = 'بازگشت به روز جاری';
 
 
     }
@@ -193,7 +193,20 @@ export class calendar_view {
             this.listener_month_change();
         });
     }
-
+    highlight_Day(day) {
+        const dayElements = this.calendarBody.querySelectorAll('.day.current');
+        dayElements.forEach(el => {
+          if(persianToEnglishNumber(el.innerText) === day) {
+            el.classList.add('highlighted-day');
+        }
+        });
+    }
+    remove_Highlight_Day() {
+        const dayElements = this.calendarBody.querySelectorAll('.day.current.highlighted-day');
+        dayElements.forEach(el => {
+            el.classList.remove('highlighted-day');
+        });
+    }
     render() {
         this.calendarBody.innerText = '';
         this.set_Holidays(this.initial_Month);
@@ -202,7 +215,7 @@ export class calendar_view {
         this.create_next_month_days();
         this.create_box_header();
         this.create_restart_button();
-        
+
     }
     load_View() {
         this.render();
