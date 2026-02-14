@@ -60,7 +60,7 @@ button{
   color:#666;
   font-size:14px;
   line-height:1.9;
-  width: 300px;
+  width: 350px;
 }
 #dates_info_list li {
   padding: 2px 8px;
@@ -72,8 +72,8 @@ button{
   white-space: nowrap;
   font-size: 14px;
 }
-.event-item:hover {
-  background: #78cdf7;
+.event_item:hover {
+  background: #7bbaf2;
   cursor: pointer;
 }
 .holiday-event {
@@ -165,7 +165,7 @@ button{
   background: #fcd7d7;
 }
 .day.highlighted-day{
-color: rgb(61, 23, 252);
+color: rgb(37, 4, 205);
 background: #7bbaf2;
 transform: translateY(-4px);
 }

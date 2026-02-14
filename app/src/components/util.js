@@ -4,6 +4,7 @@ export function toPersianNumber(num) {
         "۰۱۲۳۴۵۶۷۸۹" [d]
     );
 };
+//Change persian number to english
 export function persianToEnglishNumber(persianStr) {
   const persianDigits = "۰۱۲۳۴۵۶۷۸۹";
   const arabicDigits  = "٠١٢٣٤٥٦٧٨٩";

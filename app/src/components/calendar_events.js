@@ -1,7 +1,8 @@
 import eventsList from '../data/events.json';
 import jMonths2 from '../data/jalali-months.json';
 import {
-    toPersianNumber,persianToEnglishNumber
+    toPersianNumber,
+    persianToEnglishNumber
 } from './util';
 
 export class calendar_events {
@@ -11,7 +12,6 @@ export class calendar_events {
     dates_info_list;
     events;
     month_name;
-    events_holiday_list;
     constructor(month_index) {
         this.set_Month(month_index);
         // root element
@@ -36,9 +36,39 @@ export class calendar_events {
         this.events.sort((a, b) => a.day - b.day);
 
     }
+
+    listenerHoverEventItems() {
+        this.dates_info_list.addEventListener('mouseover', (e) => {
+            const item = e.target.closest('.event_item');
+            if (!item) return;
+
+            const detail = {
+                day: persianToEnglishNumber(
+                    item.querySelector('.event-day').innerText.split(' ')[0]
+                )
+            };
+
+            this.dates_information.dispatchEvent(
+                new CustomEvent('mouseon', {
+                    detail
+                })
+            );
+        });
+
+        this.dates_info_list.addEventListener('mouseout', (e) => {
+            const item = e.target.closest('.event_item');
+            if (!item) return;
+
+            this.dates_information.dispatchEvent(
+                new CustomEvent('mouseout', {
+                    detail: null
+                })
+            );
+        });
+    }
     create_Event_item(ev) {
         const li = document.createElement('li');
-        li.className = 'event-item';
+        li.className = 'event_item';
         const daysInMonth = ev.day;
         li.innerHTML = `
             <span class="event-day">${toPersianNumber(daysInMonth)} ${this.month_name}</span>
@@ -48,25 +78,6 @@ export class calendar_events {
             li.classList.add('holiday-event');
         }
         return li;
-    }
-    listenerHoverEventItems() {
-        const eventItems = this.dates_info_list.querySelectorAll('.event-item');
-        eventItems.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                const detail = {
-                    day: persianToEnglishNumber(item.querySelector('.event-day').innerText.split(' ')[0])
-                };
-                this.dates_information.dispatchEvent(new CustomEvent('mouseon', {
-                    detail: detail
-                })); 
-            });
-            item.addEventListener('mouseleave', () => {
-                this.dates_information.dispatchEvent(new CustomEvent('mouseout', {
-                    detail: null
-                }));
-            });
-        });
-
     }
     append_Events() {
         this.events.forEach(ev => {

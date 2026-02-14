@@ -1,9 +1,13 @@
 // just  view builder and creator month days.
 import jMonths from '../data/jalali-months.json';
 import {
-    toPersianNumber, persianToEnglishNumber
+    toPersianNumber,
+    persianToEnglishNumber
 } from './util';
-import * as core from './calendar_logic';
+import {
+    get_Jalali_Month_Days,
+    get_Start_Of_Jalali_Month_Weekday
+} from 'jalali';
 import eventsList from '../data/events.json';
 export class calendar_view {
     initial_Year;
@@ -21,13 +25,6 @@ export class calendar_view {
     currentdate;
     holidays_List = [];
 
-    set_Holidays(month_index) {
-        for (let i = 0; i < eventsList[month_index].length; i++) {
-            if (eventsList[month_index][i].holiday === true) {
-                this.holidays_List.push(eventsList[month_index][i].day);
-            }
-        }
-    }
     constructor(year, month, day) {
         this.initial_Day = day;
         this.initial_Month = month;
@@ -65,6 +62,13 @@ export class calendar_view {
 
 
     }
+    set_Holidays(month_index) {
+        for (let i = 0; i < eventsList[month_index].length; i++) {
+            if (eventsList[month_index][i].holiday === true) {
+                this.holidays_List.push(eventsList[month_index][i].day);
+            }
+        }
+    }
     update_date(year, month, day) {
         this.initial_Day = day;
         this.initial_Month = month;
@@ -76,15 +80,15 @@ export class calendar_view {
         }
     }
     jalali_month_days() {
-        return core.get_Jalali_Month_Days(this.initial_Year, this.initial_Month);
+        return get_Jalali_Month_Days(this.initial_Year, this.initial_Month);
     }
     start_of_month_weekday() {
-        return core.get_Start_Of_Jalali_Month_Weekday(this.initial_Year, this.initial_Month);
+        return get_Start_Of_Jalali_Month_Weekday(this.initial_Year, this.initial_Month);
     }
     prev_month_days() {
         const prevMonth = this.initial_Month === 0 ? 11 : this.initial_Month - 1;
         const prevYear = this.initial_Month === 0 ? this.initial_Year - 1 : this.initial_Year;
-        const prevDays = core.get_Jalali_Month_Days(prevYear, prevMonth);
+        const prevDays = get_Jalali_Month_Days(prevYear, prevMonth);
         return prevDays;
     }
     next_month_days() {
@@ -143,8 +147,6 @@ export class calendar_view {
     }
     create_restart_button() {
         this.todayBtn.innerText = 'بازگشت به روز جاری';
-
-
     }
     listener_month_change() {
         const datails = {
@@ -185,7 +187,6 @@ export class calendar_view {
         this.update_date(year, month, day);
         this.load_View();
     }
-
     restart_to_today_button() {
         this.todayBtn.addEventListener('click', () => {
             this.update_date(this.currentdate.year, this.currentdate.month, this.currentdate.day);
@@ -196,9 +197,9 @@ export class calendar_view {
     highlight_Day(day) {
         const dayElements = this.calendarBody.querySelectorAll('.day.current');
         dayElements.forEach(el => {
-          if(persianToEnglishNumber(el.innerText) === day) {
-            el.classList.add('highlighted-day');
-        }
+            if (persianToEnglishNumber(el.innerText) === day) {
+                el.classList.add('highlighted-day');
+            }
         });
     }
     remove_Highlight_Day() {
