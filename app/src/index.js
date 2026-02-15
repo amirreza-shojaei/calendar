@@ -34,18 +34,16 @@ const ViewElement = new calendar_view(jyear, jmonth, jday);
 const EventElement = new calendar_events(jmonth);
 // link month change event
 ViewElement.mainCalendar.addEventListener('monthChange', (e) => {
-const newMonth = e.detail.month;
-EventElement.reload_Events(newMonth);
+    const newMonth = e.detail.month;
+    EventElement.reload_Events(newMonth);
 });
 EventElement.dates_information.addEventListener('mouseon', (e) => {
-const detail = e.detail;
-ViewElement.highlight_Day(detail.day);
+    const detail = e.detail;
+    ViewElement.highlight_Day(detail.day);
 });
 EventElement.dates_information.addEventListener('mouseout', (e) => {
-   ViewElement.remove_Highlight_Day();
+    ViewElement.remove_Highlight_Day();
 });
-
-
 
 calendardisplay.appendChild(ViewElement.load_View());
 calendardisplay.appendChild(EventElement.load_Events());
