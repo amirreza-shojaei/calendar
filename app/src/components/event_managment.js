@@ -2,7 +2,6 @@ import eventsList from '../data/events.json';
 import jMonths2 from '../data/jalali-months.json';
 import {
     toPersianNumber,
-    persianToEnglishNumber
 } from './util';
 
 export class calendar_events {

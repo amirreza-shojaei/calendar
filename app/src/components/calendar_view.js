@@ -5,9 +5,9 @@ import {
     persianToEnglishNumber
 } from './util';
 import {
-    get_Jalali_Month_Days,
-    get_Start_Of_Jalali_Month_Weekday
-} from 'jalali';
+    monthDaysJalali,
+    firstWeekDayOfJalaliMonth
+} from 'jalali-lib';
 import eventsList from '../data/events.json';
 export class calendar_view {
     initial_Year;
@@ -80,15 +80,15 @@ export class calendar_view {
         }
     }
     jalali_month_days() {
-        return get_Jalali_Month_Days(this.initial_Year, this.initial_Month);
+        return monthDaysJalali(this.initial_Year, this.initial_Month+1);
     }
     start_of_month_weekday() {
-        return get_Start_Of_Jalali_Month_Weekday(this.initial_Year, this.initial_Month);
+        return firstWeekDayOfJalaliMonth(this.initial_Year, this.initial_Month+1);
     }
     prev_month_days() {
         const prevMonth = this.initial_Month === 0 ? 11 : this.initial_Month - 1;
         const prevYear = this.initial_Month === 0 ? this.initial_Year - 1 : this.initial_Year;
-        const prevDays = get_Jalali_Month_Days(prevYear, prevMonth);
+        const prevDays = monthDaysJalali(prevYear, prevMonth+1);
         return prevDays;
     }
     next_month_days() {

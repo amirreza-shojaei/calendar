@@ -116,16 +116,12 @@ export class calendar_events {
     create_Event_item(ev) {
         const li = document.createElement('li');
         const type = ev.type || 'official'; 
-        
-        // اضافه کردن کلاس‌ها برای CSS
         li.className = `event_item type-${type}`;
-        
         const daysInMonth = ev.day;
         li.innerHTML = `
             <span class="event-day">${toPersianNumber(daysInMonth)} ${this.month_name}</span>
             <span class="event-title">${ev.title}</span>
         `;
-
         if (ev.holiday === true) {
             li.classList.add('holiday-event');
         }
@@ -133,15 +129,11 @@ export class calendar_events {
     }
 
     append_Events() {
-        this.dates_info_list.innerText = ""; // پاک کردن لیست قبل از رندر مجدد
-
-        // 5. فیلتر کردن ایونت‌ها قبل از نمایش
+        this.dates_info_list.innerText = ""; 
         const filteredEvents = this.events.filter(ev => {
-            // اگر در جیسون type نداری، پیش‌فرض را official می‌گیریم که پروژت خراب نشه
             const eventType = ev.type || 'official';
             return this.activeFilters.has(eventType);
         });
-
         filteredEvents.forEach(ev => {
             const li = this.create_Event_item(ev);
             this.dates_info_list.appendChild(li);
@@ -158,8 +150,6 @@ export class calendar_events {
         this.create_Header();
         this.sort_Events();
         this.append_Events();
-
-        // پاکسازی و چیدمان: اول فیلتر، بعد هدر، بعد لیست رویدادها
         this.dates_information.innerText = "";
         this.dates_information.append(this.filter_container, this.dates_info_header, this.dates_info_list);
 

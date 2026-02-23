@@ -1,6 +1,11 @@
+/**
+ * Jalali Date Utility Library
+ * Accurate algorithmic conversion based on Borkowski/Jalaali algorithms.
+ */
 
-//Change jalali to gregorian
-// --- Utility ---
+// -----------------------------------------------------------------------------
+// Core Conversion Logic (Internal Helpers)
+// -----------------------------------------------------------------------------
 function div(a, b) {
   return ~~(a / b);
 }
@@ -9,32 +14,11 @@ function mod(a, b) {
   return a - ~~(a / b) * b;
 }
 
-// --- Convert Jalaali date to Gregorian date ---
-export function toGregorian(jy, jm, jd) {
-  return d2g(j2d(jy, jm, jd));
-}
-
-// --- Jalaali to Julian Day Number ---
-function j2d(jy, jm, jd) {
-  var r = jalCal(jy);
-  return g2d(r.gy, 3, r.march) + (jm - 1) * 31 - div(jm, 7) * (jm - 7) + jd - 1;
-}
-
-// --- Julian Day to Gregorian ---
-function d2g(jdn) {
-  var j, i, gd, gm, gy;
-  j = 4 * jdn + 139361631;
-  j = j + div(div(4 * jdn + 183187720, 146097) * 3, 4) * 4 - 3908;
-  i = div(mod(j, 1461), 4) * 5 + 308;
-  gd = div(mod(i, 153), 5) + 1;
-  gm = mod(div(i, 153), 12) + 1;
-  gy = div(j, 1461) - 100100 + div(8 - gm, 6);
-  return { gy, gm, gd };
-}
-
-// --- Main Jalaali calendar core calculation ---
-function jalCal(jy) {
-  var breaks = [-61, 9, 38, 199, 426, 686, 756, 818, 1111,
+/**
+ * Calculates Gregorian and Julian calendar data from Jalali year
+ */
+function jalaliCal(jy) {
+ var breaks = [-61, 9, 38, 199, 426, 686, 756, 818, 1111,
     1181, 1210, 1635, 2060, 2097, 2192, 2262,
     2324, 2394, 2456, 3178];
 
@@ -62,36 +46,223 @@ function jalCal(jy) {
   return { gy: gy, march: march };
 }
 
-// --- Gregorian to Julian Day ---
-function g2d(gy, gm, gd) {
-  var d =
+/**
+ * Converts Jalali date to Julian Day Number (JDN)
+ */
+function jalaliToJdn(jy, jm, jd) {
+  const r = jalaliCal(jy);
+  return (
+    gregorianToJdn(r.gy, 3, r.march) +
+    (jm - 1) * 31 -
+    div(jm, 7) * (jm - 7) +
+    jd -
+    1
+  );
+}
+
+/**
+ * Converts Julian Day Number (JDN) to Jalali date
+ */
+function jdnToJalali(jdn) {
+  const gy = jdnToGregorian(jdn).gy;
+  let jy = gy - 621;
+  let r = jalaliCal(jy);
+  let jdn1f = gregorianToJdn(r.gy, 3, r.march);
+  let k = jdn - jdn1f;
+
+  if (k >= 0) {
+    if (k <= 185) {
+      const jm = 1 + div(k, 31);
+      const jd = mod(k, 31) + 1;
+      return { jy, jm, jd };
+    } else {
+      k -= 186;
+    }
+  } else {
+    jy -= 1;
+    r = jalaliCal(jy); // <--- بسیار مهم: اطلاعات سال قبل را لود کن
+    jdn1f = gregorianToJdn(r.gy, 3, r.march); // JDN اول فروردین سال قبل
+    k = jdn - jdn1f; // k را دوباره بر اساس سال قبل حساب کن
+    
+    // حالا اگر k مثبت بود (که هست)، از بخش ماه‌های نیمه دوم حساب کن
+    k -= 186;
+  }
+
+  const jm = 7 + div(k, 30);
+  const jd = mod(k, 30) + 1;
+  return { jy, jm, jd };
+}
+/**
+ * Converts Gregorian date to Julian Day Number
+ */
+function gregorianToJdn(gy, gm, gd) {
+  return (
     div((gy + div(gm - 8, 6) + 100100) * 1461, 4) +
     div(153 * mod(gm + 9, 12) + 2, 5) +
     gd -
-    34840408;
-  d =
-    d -
+    34840408 -
     div(div(gy + 100100 + div(gm - 8, 6), 100) * 3, 4) +
-    752;
-  return d;
+    752
+  );
 }
-//kabise year
-export function is_Leap_Jalali(jy) {
+
+/**
+ * Converts Julian Day Number to Gregorian date
+ */
+function jdnToGregorian(jdn) {
+  let j = 4 * jdn + 139361631;
+  j = j + div(div(4 * jdn + 183187720, 146097) * 3, 4) * 4 - 3908;
+  const i = div(mod(j, 1461), 4) * 5 + 308;
+  const gd = div(mod(i, 153), 5) + 1;
+  const gm = mod(div(i, 153), 12) + 1;
+  const gy = div(j, 1461) - 100100 + div(8 - gm, 6);
+  return { gy, gm, gd };
+}
+
+// -----------------------------------------------------------------------------
+// Public Exported Functions
+// -----------------------------------------------------------------------------
+
+ function jalaliToday() {
+  const now = new Date();
+  return changeToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
+}
+
+ function isLeapJalaliYear(jy) {
 const kabisePattern = [1, 5, 9, 13, 17, 22, 26, 30];
 return kabisePattern.includes(jy % 33);
-};
-//month days
-export function get_Jalali_Month_Days(jy, jm) {
-// jm: 0..11
-if (jm <= 5) return 31;
-if (jm <= 10) return 30;
-return is_Leap_Jalali(jy) ? 30 : 29;
-};
-//start of month weekday
-export function get_Start_Of_Jalali_Month_Weekday(jy, jm) {
+}
+
+ function monthDaysJalali(jy, jm) {
+  if (jm <= 6) return 31;
+  if (jm <= 11) return 30;
+  return isLeapJalaliYear(jy) ? 30 : 29;
+}
+
+ function isValid(jy, jm, jd) {
+  if (jm < 1 || jm > 12) return false;
+  if (jd < 1) return false;
+  return jd <= monthDaysJalali(jy, jm);
+}
+
+ function changeToJalali(gy, gm, gd) {
+  const jdn = gregorianToJdn(gy, gm, gd);
+  return jdnToJalali(jdn);
+}
+
+ function changeToGregorian(jy, jm, jd) {
+  const jdn = jalaliToJdn(jy, jm, jd);
+  return jdnToGregorian(jdn);
+}
+
+// --- Weekday Functions ---
+
+ function weekDayJalali(jy, jm, jd) {
 // return 0..6 where Saturday=0 ... Friday=6
-const g = toGregorian(jy, jm + 1, 1);
+const g = changeToGregorian(jy, jm, jd);
 const weekday = new Date(g.gy, g.gm - 1, g.gd).getDay();
 // convert JS (Sun=0) to Jalali-style (Sat=0)
-return (weekday + 1) % 7;
+return (weekday + 1) % 7; 
+}
+
+ function firstWeekDayOfJalaliMonth(jy, jm) {
+  return weekDayJalali(jy, jm, 1);
+}
+
+ function firstWeekDayOfJalaliYear(jy) {
+  return weekDayJalali(jy, 1, 1);
+}
+
+ function lastWeekDayOfJalaliYear(jy) {
+  return weekDayJalali(jy, 12, monthDaysJalali(jy, 12));
+}
+
+ function nameOfJalaliWeekday(jy, jm, jd) {
+  const weekdays = [
+    "شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"
+  ];
+  return weekdays[weekDayJalali(jy, jm, jd)];
+}
+
+ function nameOfJalaliMonth(jm) {
+  const months = [
+    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
+  ];
+  return months[jm - 1];
+}
+
+ function formaterJalaliDate(jy, jm, jd) {
+  return `${nameOfJalaliWeekday(jy, jm, jd)}، ${jd} ${nameOfJalaliMonth(jm)} ${jy}`;
+}
+
+// --- Arithmetic Functions (Fixed) ---
+
+ function addDaysToJalaliDate(jy, jm, jd, daysToAdd) {
+  const currentJdn = jalaliToJdn(jy, jm, jd);
+  const newJdn = currentJdn + daysToAdd;
+  return jdnToJalali(newJdn);
+}
+
+ function addMonthsToJalaliDate(jy, jm, jd, monthsToAdd) {
+  // Normalize months (handling negatives and large numbers)
+  const totalMonths = (jy * 12) + (jm - 1) + monthsToAdd;
+  
+  let newJy = Math.floor(totalMonths / 12);
+  let newJm = (totalMonths % 12) + 1;
+  
+  // Handle case where modulo returns negative for negative monthsToAdd
+  if (newJm <= 0) {
+      newJm += 12;
+      newJy -= 1; // Correction logic handled by floor usually, but explicit check matches logic better
+  }
+
+  // Handle End-of-Month Overflow (e.g., 31 Shahrivar -> Mehr)
+  const maxDays = monthDaysJalali(newJy, newJm);
+  const newJd = Math.min(jd, maxDays);
+
+  return { jy: newJy, jm: newJm, jd: newJd };
+}
+
+ function addYearsToJalaliDate(jy, jm, jd, yearsToAdd) {
+    const newJy = jy + yearsToAdd;
+    // Check for leap year mismatch (e.g. 30 Esfand in leap year -> next year non-leap)
+    const maxDays = monthDaysJalali(newJy, jm);
+    const newJd = Math.min(jd, maxDays);
+    
+    return { jy: newJy, jm, jd: newJd };
+}
+
+ function differenceInDaysJalali(jy1, jm1, jd1, jy2, jm2, jd2) {
+  const jdn1 = jalaliToJdn(jy1, jm1, jd1);
+  const jdn2 = jalaliToJdn(jy2, jm2, jd2);
+  return jdn2 - jdn1;
+}
+
+ function differenceInMonthsJalali(jy1, jm1, jy2, jm2) {
+  const totalMonths1 = jy1 * 12 + (jm1 - 1);
+  const totalMonths2 = jy2 * 12 + (jm2 - 1);
+  return totalMonths2 - totalMonths1;
+}
+
+
+module.exports = {
+  jalaliToday,
+  isLeapJalaliYear,
+  monthDaysJalali,
+  isValid,
+  changeToJalali,
+  changeToGregorian,
+  weekDayJalali,
+  firstWeekDayOfJalaliMonth,
+  firstWeekDayOfJalaliYear,
+  lastWeekDayOfJalaliYear,
+  nameOfJalaliWeekday,
+  nameOfJalaliMonth,
+  formaterJalaliDate,
+  addDaysToJalaliDate,
+  addMonthsToJalaliDate,
+  addYearsToJalaliDate,
+  differenceInDaysJalali,
+  differenceInMonthsJalali
 };
