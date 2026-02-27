@@ -123,41 +123,41 @@ function jdnToGregorian(jdn) {
 // Public Exported Functions
 // -----------------------------------------------------------------------------
 
- function jalaliToday() {
+export function jalaliToday() {
   const now = new Date();
   return changeToJalali(now.getFullYear(), now.getMonth() + 1, now.getDate());
 }
 
- function isLeapJalaliYear(jy) {
+export function isLeapJalaliYear(jy) {
 const kabisePattern = [1, 5, 9, 13, 17, 22, 26, 30];
 return kabisePattern.includes(jy % 33);
 }
 
- function monthDaysJalali(jy, jm) {
+ export function monthDaysJalali(jy, jm) {
   if (jm <= 6) return 31;
   if (jm <= 11) return 30;
   return isLeapJalaliYear(jy) ? 30 : 29;
 }
 
- function isValid(jy, jm, jd) {
+export function isValid(jy, jm, jd) {
   if (jm < 1 || jm > 12) return false;
   if (jd < 1) return false;
   return jd <= monthDaysJalali(jy, jm);
 }
 
- function changeToJalali(gy, gm, gd) {
+export function changeToJalali(gy, gm, gd) {
   const jdn = gregorianToJdn(gy, gm, gd);
   return jdnToJalali(jdn);
 }
 
- function changeToGregorian(jy, jm, jd) {
+export function changeToGregorian(jy, jm, jd) {
   const jdn = jalaliToJdn(jy, jm, jd);
   return jdnToGregorian(jdn);
 }
 
 // --- Weekday Functions ---
 
- function weekDayJalali(jy, jm, jd) {
+export function weekDayJalali(jy, jm, jd) {
 // return 0..6 where Saturday=0 ... Friday=6
 const g = changeToGregorian(jy, jm, jd);
 const weekday = new Date(g.gy, g.gm - 1, g.gd).getDay();
@@ -165,26 +165,26 @@ const weekday = new Date(g.gy, g.gm - 1, g.gd).getDay();
 return (weekday + 1) % 7; 
 }
 
- function firstWeekDayOfJalaliMonth(jy, jm) {
+export function firstWeekDayOfJalaliMonth(jy, jm) {
   return weekDayJalali(jy, jm, 1);
 }
 
- function firstWeekDayOfJalaliYear(jy) {
+export function firstWeekDayOfJalaliYear(jy) {
   return weekDayJalali(jy, 1, 1);
 }
 
- function lastWeekDayOfJalaliYear(jy) {
+export function lastWeekDayOfJalaliYear(jy) {
   return weekDayJalali(jy, 12, monthDaysJalali(jy, 12));
 }
 
- function nameOfJalaliWeekday(jy, jm, jd) {
+export function nameOfJalaliWeekday(jy, jm, jd) {
   const weekdays = [
     "شنبه", "یک‌شنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"
   ];
   return weekdays[weekDayJalali(jy, jm, jd)];
 }
 
- function nameOfJalaliMonth(jm) {
+export function nameOfJalaliMonth(jm) {
   const months = [
     "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
     "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"
@@ -192,19 +192,18 @@ return (weekday + 1) % 7;
   return months[jm - 1];
 }
 
- function formaterJalaliDate(jy, jm, jd) {
+export function formaterJalaliDate(jy, jm, jd) {
   return `${nameOfJalaliWeekday(jy, jm, jd)}، ${jd} ${nameOfJalaliMonth(jm)} ${jy}`;
 }
 
 // --- Arithmetic Functions (Fixed) ---
-
- function addDaysToJalaliDate(jy, jm, jd, daysToAdd) {
+export function addDaysToJalaliDate(jy, jm, jd, daysToAdd) {
   const currentJdn = jalaliToJdn(jy, jm, jd);
   const newJdn = currentJdn + daysToAdd;
   return jdnToJalali(newJdn);
 }
 
- function addMonthsToJalaliDate(jy, jm, jd, monthsToAdd) {
+export function addMonthsToJalaliDate(jy, jm, jd, monthsToAdd) {
   // Normalize months (handling negatives and large numbers)
   const totalMonths = (jy * 12) + (jm - 1) + monthsToAdd;
   
@@ -224,7 +223,7 @@ return (weekday + 1) % 7;
   return { jy: newJy, jm: newJm, jd: newJd };
 }
 
- function addYearsToJalaliDate(jy, jm, jd, yearsToAdd) {
+export function addYearsToJalaliDate(jy, jm, jd, yearsToAdd) {
     const newJy = jy + yearsToAdd;
     // Check for leap year mismatch (e.g. 30 Esfand in leap year -> next year non-leap)
     const maxDays = monthDaysJalali(newJy, jm);
@@ -233,36 +232,15 @@ return (weekday + 1) % 7;
     return { jy: newJy, jm, jd: newJd };
 }
 
- function differenceInDaysJalali(jy1, jm1, jd1, jy2, jm2, jd2) {
+export function differenceInDaysJalali(jy1, jm1, jd1, jy2, jm2, jd2) {
   const jdn1 = jalaliToJdn(jy1, jm1, jd1);
   const jdn2 = jalaliToJdn(jy2, jm2, jd2);
   return jdn2 - jdn1;
 }
 
- function differenceInMonthsJalali(jy1, jm1, jy2, jm2) {
+export function differenceInMonthsJalali(jy1, jm1, jy2, jm2) {
   const totalMonths1 = jy1 * 12 + (jm1 - 1);
   const totalMonths2 = jy2 * 12 + (jm2 - 1);
   return totalMonths2 - totalMonths1;
 }
 
-
-module.exports = {
-  jalaliToday,
-  isLeapJalaliYear,
-  monthDaysJalali,
-  isValid,
-  changeToJalali,
-  changeToGregorian,
-  weekDayJalali,
-  firstWeekDayOfJalaliMonth,
-  firstWeekDayOfJalaliYear,
-  lastWeekDayOfJalaliYear,
-  nameOfJalaliWeekday,
-  nameOfJalaliMonth,
-  formaterJalaliDate,
-  addDaysToJalaliDate,
-  addMonthsToJalaliDate,
-  addYearsToJalaliDate,
-  differenceInDaysJalali,
-  differenceInMonthsJalali
-};

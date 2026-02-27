@@ -7,7 +7,6 @@
   "author": "",
   "license": "ISC",
   "private" :true,
-  "type":"commonjs",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build": "webpack"

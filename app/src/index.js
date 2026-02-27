@@ -6,6 +6,10 @@ import {
 import {
     calendar_view
 } from './components/calendar_view'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import CalendarView from './ReactCode/CalendarView';
+import CalendarEvent from './ReactCode/CalendarEvent';
 /*
 const siteheader = webheader();
 document.body.prepend(siteheader.header);
@@ -45,5 +49,35 @@ EventElement.dates_information.addEventListener('mouseout', (e) => {
     ViewElement.remove_Highlight_Day();
 });
 
+
+
+
+/******** react*/
+
+const ViewComponent =document.createElement('div');
+ViewComponent.id='ViewDiv';
+calendardisplay.appendChild(ViewComponent);
+
+const View = ReactDOM.createRoot(ViewComponent);
+View.render(
+  <React.StrictMode>
+   <CalendarView  year ={jyear} month={jmonth} day={jday}  />
+  </React.StrictMode>
+);
+
+const EventComponent =document.createElement('div');
+EventComponent.id='EventDiv';
+calendardisplay.appendChild(EventComponent);
+const Event = ReactDOM.createRoot(EventComponent);
+Event.render(
+  <React.StrictMode>
+   <CalendarEvent MonthIndex={jmonth} />
+  </React.StrictMode>
+);
+
+
+
+/****/
 calendardisplay.appendChild(ViewElement.load_View());
 calendardisplay.appendChild(EventElement.load_Events());
+

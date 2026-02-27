@@ -22,8 +22,7 @@ module.exports = {
     },
 
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.css$/,
                 use: ["style-loader", "css-loader"]
             },
@@ -43,8 +42,18 @@ module.exports = {
                         presets: ["@babel/preset-env"]
                     }
                 }
+            },
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader'
+                }
             }
         ]
+    },
+    resolve: {
+        extensions: ['.js', '.jsx']
     },
 
     plugins: [
