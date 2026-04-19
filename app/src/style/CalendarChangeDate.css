@@ -1,0 +1,50 @@
+.item {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fbfbfb;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #333;
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+  user-select: none;
+  border: solid;
+  border-color: #e7d4d498;
+}
+.box-item {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-top: 6px;
+  direction: rtl;
+}
+.box-item-year {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 6px;
+  direction: rtl;
+  font-size: 18px;
+}
+.item:hover{
+    background-color: rgb(255, 127, 127);
+    transform: translateY(-5px);
+}
+.item.active{
+  background-color: rgb(239, 69, 69);
+  transform: translateY(-5px);
+}
+.main-box {
+  width: 470px;            
+  background: var(--card);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+  direction: rtl;          
+}
+

@@ -18,7 +18,7 @@ import {
   differenceInDaysJalali,
   differenceInMonthsJalali,
   jalaliToday
-} from "./temp.js";
+} from "./index.js";
 
 
 describe("Public Exported Functions", () => {

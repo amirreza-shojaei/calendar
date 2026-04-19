@@ -1,21 +1,38 @@
-import React, { useState } from "react";
-import { nameOfJalaliMonth } from "../../../libs/jalali/src";
+import React ,{PureComponent} from "react";
+import { nameOfJalaliMonth } from "jalali-lib";
 import eventsList from "../data/events.json";
-import { toPersianNumber } from "../components/util";
+import EventItem from "./CalendarEventItem";
+import "../style/CalendarEvent.css";
+import AppContext from "../Contexts/AppContex";
 
-class CalendarEvent extends React.Component {
+class CalendarEvent extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { activeFilters: ["official"], monthIndex: props.MonthIndex };
-  }
+    
+  };
+  static contextType =AppContext;
+  state = { activeFilters: ["official"],eventsFromInput:this.props.newEventFromInput };
+
   getMonthName() {
-    return nameOfJalaliMonth(this.state.monthIndex + 1);
+    return nameOfJalaliMonth(this.props.month + 1);
   }
   getEvents() {
-    return eventsList[this.state.monthIndex] || [];
+    let eventsDefualt =[];
+    let eventsInput =[];
+    eventsList.forEach(element => {
+      if(element.year ==this.props.year && element.month ==this.props.month){
+        eventsDefualt.push(element);
+      }
+    });
+    this.state.eventsFromInput.forEach(element => {
+      if(element.year ==this.props.year && element.month ==this.props.month){
+        eventsInput.push(element);
+      }
+    });
+        return [...eventsDefualt,...eventsInput];
   }
   getSortedEvents() {
-    return [...this.getEvents()].sort((a, b) => a.day - b.day);
+    return [ ...this.getEvents()].sort((a, b) => a.day - b.day);
   }
   toggleFilter(filterId) {
     this.setState((prev) => {
@@ -30,24 +47,27 @@ class CalendarEvent extends React.Component {
       }
     });
   }
-
   getFilteredEvents() {
     return this.getSortedEvents().filter((ev) => {
-      const type = ev.type || "official";
+      const type = ev.type  || "official";
       return this.state.activeFilters.includes(type);
     });
-  }
+  };
+
+
 
   render() {
+    const filteredEvents =this.getFilteredEvents();
     const monthName = this.getMonthName();
-    const filteredEvents = this.getFilteredEvents();
+
     const filters = [
       { id: "official", name: "رسمی" },
       { id: "work", name: "محل کار" },
       { id: "university", name: "دانشگاه" },
+      {id :"personal" ,name:"شخصی"}
     ];
-
     return (
+    <>
       <div className="dates_information">
         <div className="filter_container">
           {filters.map((filter) => (
@@ -63,25 +83,23 @@ class CalendarEvent extends React.Component {
           ))}
         </div>
 
-        <div id="dates_info_header">مناسبت های {monthName} ماه</div>
+        <div className="dates_info_header">مناسبت های {monthName} ماه</div>
 
-        <ul id="dates_info_list">
+        <ul className="dates_info_list">
           {filteredEvents.map((ev, index) => (
-            <li
+            <EventItem
               key={index}
-              className={`event_item type-${ev.type || "official"} ${
-                ev.holiday ? "holiday-event" : ""
-              }`}
-            >
-              <span className="event-day">
-                {ev.day} {monthName}
-              </span>
-              <span className="event-title">{ev.title}</span>
-            </li>
+              ev={ev}
+              monthName={monthName}
+            />
           ))}
         </ul>
+        <button onClick={()=>this.context.newEventBoolian(true) } className="newevent-button"><i className=" fa-solid fa-plus "></i></button>
       </div>
+      </>
     );
   }
 }
 export default CalendarEvent;
+
+

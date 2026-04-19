@@ -1,0 +1,115 @@
+.registration {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+  direction: rtl; 
+  width: 300px;
+}
+
+.registration:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.title {
+  font-size: 1.6rem;
+  color: #000000;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-event {
+  background: var(--card);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.081);
+  width: 100%;
+  padding: 10px 12px;
+  font-weight:400;
+  font-size:12px ;
+  font-family: var(--font-family);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.input-event:focus{
+  border-color: #d65a5a;
+  box-shadow: 0 0 4px rgba(90, 158, 214, 0.318);
+}
+.input-date{
+      background: var(--card);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.081);
+  width: 60%;
+  padding: 10px 12px;
+  font-weight:400;
+  font-size:11px ;
+  font-family: var(--font-family);
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.input-date:focus {
+  border-color: #d65a5a;
+  box-shadow: 0 0 4px rgba(90, 158, 214, 0.318);
+}
+
+.category-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: #000000;
+  user-select: none;
+}
+.category-checkbox {
+  margin-left: 8px;
+  accent-color: #d65a5a;
+}
+.submit-button {
+  background-color: #d65a5a;
+  color: #000000;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.submit-button:hover {
+  background-color: rgb(250, 165, 165);
+  transform: translateY(-2px);
+}
+.submit-button:active {
+  transform: translateY(0);
+}
+.title {
+  font-size: 1.4rem;
+}
+.input,
+.submit-button {
+  font-size: 0.9rem;
+}
+.close-button{
+  background: transparent;
+  border: none;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  font-size:20px;
+  cursor:pointer;
+}
+.error{
+  color: red;
+  font-size: 10px;
+}

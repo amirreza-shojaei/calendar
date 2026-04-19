@@ -1,0 +1,46 @@
+.holiday-event {
+  color:#ff4d4d;
+  font-weight: 800;
+}
+
+.event-day {
+  font-weight: 800;
+  color: #222;
+}
+
+.event_item {
+    border-right: 4.3px solid transparent;
+    transition: border-color 0.3s ease;
+}
+
+.event_item.type-official {
+    border-right-color: #f7801e;
+}
+.event_item.type-official:hover{
+  transform: translateX(-8px);
+  background: #f3d6ac;
+}
+
+.event_item.type-work {
+    border-right-color: #2196f3;
+}
+.event_item.type-work:hover{
+  transform: translateX(-8px);
+  background: #b9ddf7;
+}
+
+.event_item.type-university {
+    border-right-color: #4caf50;
+}
+.event_item.type-university:hover{
+  transform: translateX(-8px);
+  background: #c1f0c3;
+}
+
+.event_item.type-personal {
+    border-right-color: #ac4caf;
+}
+.event_item.type-personal:hover{
+  transform: translateX(-8px);
+  background: #f0c1ed;
+}

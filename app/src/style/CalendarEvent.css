@@ -1,0 +1,119 @@
+
+.dates_information{
+  border-radius: var(--radius);
+  width: 400px;
+  background: transparent;
+  box-shadow: none;        
+  padding: 0;
+  direction: rtl;
+}
+.newevent-button{
+  background: transparent;
+  border: none;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  font-size:22px;
+  cursor:pointer;
+}
+.dates_info_header{
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+.dates_info_list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color:#666;
+  font-size:14px;
+  line-height:1.9;
+  width: 350px;
+}
+
+.dates_info_list li {
+  padding: 2px 8px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 45px;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.filter_container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 0 10px;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    background-color: transparent;
+}
+.filter-btn:hover{
+    transform: translateY(-4px);
+}
+.filter-btn.personal {
+    border-color: #ea16d5;
+    color:  #ce16ea;
+}
+.filter-btn.personal:hover{
+    background-color: #e7b8e4;
+}
+.filter-btn.personal.active {
+    background-color: #f436f1;
+    color: #fff;
+}
+
+.filter-btn.official {
+    border-color: #ea8716;
+    color:  #ea8716;
+}
+.filter-btn.official:hover{
+    background-color: #e7d0b8;
+}
+
+.filter-btn.official.active {
+    background-color: #f48b36;
+    color: #fff;
+}
+
+.filter-btn.work {
+    border-color: #2196f3;
+    color: #2196f3;
+}
+.filter-btn.work:hover{
+    background-color: #bccfed;
+}
+
+
+.filter-btn.work.active {
+    background-color: #2196f3;
+    color: #fff;
+}
+
+.filter-btn.university {
+    border-color: #4caf50;
+    color: #4caf50;
+}
+.filter-btn.university:hover{
+    background-color: #bff3c1;
+}
+
+
+.filter-btn.university.active {
+    background-color: #4caf50;
+    color: #fff;
+}

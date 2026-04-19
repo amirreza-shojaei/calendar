@@ -1,0 +1,121 @@
+.day {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #fbfbfb;
+  border-radius: 50%;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
+  user-select: none;
+  border: solid;
+  border-color: #e7d4d498;
+}
+.geo {
+  font-size: 9px;
+  color: #5a5959;
+}
+.jala {
+  font-size: 18px;
+}
+
+.day.current {
+  background: #f8f8f8;
+}
+
+.day.prev,
+.day.next {
+  background: #f5f5f5;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.day.prev:hover,
+.day.next:hover{
+   background: #c7c3c0a3;
+  border-color: #d6bcbc;
+  font-weight: 600;
+  color: #6b6363;
+}
+
+.day.nextholiday {
+  background: #fcdada;
+  font-weight: 600;
+  color: #c46262;
+}
+.day.nextholiday:hover {
+  transform: translateY(-4px);
+  background: #dfa5a5fc;
+  color: #762a2a;
+}
+
+.day.holiday {
+  color: #ff4d4d;
+  background: #f9b6b6;
+   border-color: #e7d4d4af;
+}
+
+.day.holiday:hover {
+  transform: translateY(-4px);
+  background: #cc9191;
+  color: #7c0303;
+}
+
+.day.highlighted-day {
+  color: rgb(37, 4, 205);
+  background: #7bbaf2;
+  transform: translateY(-4px);
+}
+.day.highlighted-day-type-work {
+  color: rgb(37, 4, 205);
+  background: #7bbaf2;
+  transform: translateY(-4px);
+}
+.day.highlighted-day-type-official {
+  color: rgb(205, 118, 4);
+  background: #f5cf99;
+  transform: translateY(-4px);
+}
+.day.highlighted-day-type-university {
+  color: rgb(11, 205, 4);
+  background: #7ff27b;
+  transform: translateY(-4px);
+}
+.day.highlighted-day-type-personal {
+  color: rgb(205, 4, 198);
+  background: #f27bec;
+  transform: translateY(-4px);
+}
+
+.day.today {
+  background: #e65757de;
+  color: #333;
+  box-shadow: 0 6px 18px rgba(255, 77, 77, 0.14);
+  border: solid;
+  border-color: rgb(238, 52, 52);
+}
+
+.day.today:hover {
+  background: #ce2727da;
+  color: #333;
+  box-shadow: 0 6px 18px rgba(255, 77, 77, 0.14);
+    border-color: rgb(255, 0, 0);
+}
+
+.day:hover {
+  transform: translateY(-4px);
+  background: #c7c3c0a3;
+  border-color: #d6bcbc;
+}
+.calendar_dates {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  margin-top: 6px;
+  direction: rtl;
+}

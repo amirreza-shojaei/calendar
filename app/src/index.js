@@ -1,83 +1,8 @@
-//import {webheader} from './components/site_header'
-import './style.css';
-import {
-    calendar_events
-} from './components/calendar_events';
-import {
-    calendar_view
-} from './components/calendar_view'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import CalendarView from './ReactCode/CalendarView';
-import CalendarEvent from './ReactCode/CalendarEvent';
-/*
-const siteheader = webheader();
-document.body.prepend(siteheader.header);
-siteheader.startClock();
-*/
-
-const body = document.body;
-const calendardisplay = document.createElement('div');
-calendardisplay.className = 'calendardisplay';
-body.appendChild(calendardisplay);
-
-// get today in jalali
-const formatter = new Intl.DateTimeFormat('fa-IR-u-nu-latn', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric'
-});
-const parts = formatter.formatToParts(new Date());
-let jyear = +parts.find(p => p.type === 'year').value;
-let jmonth = +parts.find(p => p.type === 'month').value - 1;
-let jday = +parts.find(p => p.type === 'day').value;
-
-//create calendar view element
-const ViewElement = new calendar_view(jyear, jmonth, jday);
-// create calendar event element
-const EventElement = new calendar_events(jmonth);
-// link month change event
-ViewElement.mainCalendar.addEventListener('monthChange', (e) => {
-    const newMonth = e.detail.month;
-    EventElement.reload_Events(newMonth);
-});
-EventElement.dates_information.addEventListener('mouseon', (e) => {
-    const detail = e.detail;
-    ViewElement.highlight_Day(detail.day);
-});
-EventElement.dates_information.addEventListener('mouseout', (e) => {
-    ViewElement.remove_Highlight_Day();
-});
+import App from './App';
 
 
-
-
-/******** react*/
-
-const ViewComponent =document.createElement('div');
-ViewComponent.id='ViewDiv';
-calendardisplay.appendChild(ViewComponent);
-
-const View = ReactDOM.createRoot(ViewComponent);
-View.render(
-  <React.StrictMode>
-   <CalendarView  year ={jyear} month={jmonth} day={jday}  />
-  </React.StrictMode>
-);
-
-const EventComponent =document.createElement('div');
-EventComponent.id='EventDiv';
-calendardisplay.appendChild(EventComponent);
-const Event = ReactDOM.createRoot(EventComponent);
-Event.render(
-  <React.StrictMode>
-   <CalendarEvent MonthIndex={jmonth} />
-  </React.StrictMode>
-);
-
-
-
-/****/
-calendardisplay.appendChild(ViewElement.load_View());
-calendardisplay.appendChild(EventElement.load_Events());
-
+const calendardisplay = document.body;
+const View = ReactDOM.createRoot(calendardisplay);
+View.render(<React.StrictMode> <App /> </React.StrictMode>);

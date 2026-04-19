@@ -1,0 +1,42 @@
+
+.calendar_header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom: 10px;
+}
+.calendar_header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom: 10px;
+}
+
+.calendar_header button{
+  background: transparent;
+  border: none;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  font-size:22px;
+  cursor:pointer;
+}
+.header-info{
+  text-align:center;
+  font-weight:800;
+  font-size:20px;
+  display:flex;
+  gap: 110px;
+  align-items:center;
+  justify-content:center;
+}
+.geo-info{
+     font-size:14px;
+     display: grid;
+}
+ #monthName{
+  display: grid;
+ }
+ #year{
+  display: grid;
+ }
